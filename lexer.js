@@ -38,10 +38,6 @@ function parseParagraph(root) {
                     token["position"].push(i);
                     token["words"] = token["words"].concat(list);
                     tokens.push(token)
-                    token = {
-                        "position": [],
-                        "words": []
-                    }
                 }
             }
         }
@@ -75,7 +71,10 @@ function parseWords(val) {
             token["val"] = val[i];
             state = 1;
         } else if (!isWords(char) && state === 1) {
-            words.push(token);
+            token["end"]++;
+            if (isNewWord(token["val"])) {
+              words.push(token);
+            }
             token = {}
             state = 0;
         } else if (!isWords(char) && state === 0) {
@@ -87,14 +86,9 @@ function parseWords(val) {
     }
     return words;
 }
-
-
-words = parseParagraph(document.body);
-
-
 testcases=[
   ["parseWords","died and ",[{"start":0,"end":3,"val":"died"},{"start":5,"end":7,"val":"and"}]],
   ["parseParagraph",document.body,[{"position":[1,0],"words":[{"start":13,"end":15,"val":"the"},{"start":17,"end":21,"val":"World"}]},{"position":[5,0],"words":[{"start":3,"end":4,"val":"ga"},{"start":6,"end":7,"val":"de"},{"start":9,"end":11,"val":"fry"},{"start":13,"end":15,"val":"try"},{"start":18,"end":20,"val":"and"},{"start":22,"end":25,"val":"it's"},{"start":27,"end":31,"val":"while"},{"start":33,"end":35,"val":"die"}]}]]
 ]
 
-runtestcases(testcases)
+//runtestcases(testcases)
