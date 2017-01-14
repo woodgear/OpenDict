@@ -51,90 +51,38 @@ stateMap = {
         [true, "start"]
     ]
 }
-
-function stateEval(name, event) {
-    let node = stateMap[name];
-    let res = name;
-    for (cond of node) {
-        if (typeof cond[0] === "function") {
-            if (cond[0](event.val) === true) {
-                res = cond[1];
-                break;
+bindMap = [
+    [
+        ["*", "accept"],
+        [
+            function() {
+                console.log("to accept  ", arguments);
+            },
+        ]
+    ],
+    [
+        ["accept", "accept"],
+        [
+            function() {
+                console.log("acc  accept");
+            },
+            function() {
+                console.log("acc  accept 2");
             }
-        } else if (typeof cond[0] === "boolean") {
-            if (cond[0]) {
-                return cond[1];
-            }
-        }
-    }
-    return res;
-}
-
-function sicp(start) {
-    from = start;
-    to = "";
-    return function(arg) {
-        to = stateEval(from, arg);
-        bingEval({
-            "from": from,
-            "to": to,
-            "val": arg
-        });
-        return sicp(to);
-    }
-}
-
-function bingEval(arg) {
-    for (let fun of bind["*"]["*"]) {
-        fun(arg);
-    }
-    for (let fun of bind[arg["from"]]["*"]) {
-        fun(arg);
-    }
-    for (let fun of bind["*"][arg["to"]]) {
-        fun(arg);
-    }
-    for (let fun of bind[arg["from"]][arg["to"]]) {
-        fun(arg);
-    }
-}
-
-bind = {}
-
-function initBindMap() {
-    bind["*"] = {};
-    //TODO 不应如此 但如何保证 += 语法正确?
-    for (let key in stateMap) {
-        bind[key] = {}
-        bind["*"][key] = [];
-        bind[key]["*"] = [];
-        for (let val in stateMap) {
-            bind[key][val] = [];
-        }
-    }
-    bind["*"]["*"]=[];
-    // console.log(bind);
-}
-
-initBindMap();
+        ]
+    ],
+]
 
 function parseWords(str) {
-    state = sicp("start")
-    //现在我知道重载运算符的好处了 bind["*"]["accept"]+= function (){}
-    bind["*"]["accept"].push(function() {
-        console.log("to accept  ",arguments);
-    });
-    bind["*"]["accept"].push(function() {
-        console.log("to accept 2");
-    });
-    console.log(bind);
-
+    state = sm.init(stateMap,bindMap, "start");
     for (let i = 0; i < str.length; i++) {
         state = state({
             "val": str[i]
         });
     }
 }
+
+
 parseWords("测试数据 目标为the World");
 
 //parseWords("this is a apple")
