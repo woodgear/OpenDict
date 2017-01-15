@@ -39,50 +39,52 @@ stateMap = {
         [function(arg) {
             return /[A-Za-z]/.test(arg)
         }, "accept"],
-        [true, "end"]
+        [true, "start"]
     ],
     "accept": [
         [function(arg) {
             return /[A-Za-z_\-\']/.test(arg);
         }, "accept"],
-        [true, "end"],
+        [true, "start"],
     ],
-    "end": [
-        [true, "start"]
-    ]
 }
+
+//也许可以将他变成一个api add({from:,to:,fun:,})
 bindMap = [
-    [
-        ["*", "accept"],
-        [
-            function() {
-                console.log("to accept  ", arguments);
-            },
-        ]
-    ],
     [
         ["accept", "accept"],
         [
-            function() {
-                console.log("acc  accept");
+            function(event) {
+                let res = event["res"];
+                res[res.length - 1]["val"] += event["val"];
+                res[res.length - 1]["end"] += 1;
             },
-            function() {
-                console.log("acc  accept 2");
-            }
         ]
     ],
+    [
+        ["start", "accept"],
+        [
+            function(event) {
+                let res = event["res"];
+                res.push(new word_token(event["index"], event["index"]+1, event["val"]));
+            },
+        ]
+    ],
+
 ]
 
+//如何将值在传递出去? 通过参数是一种方法
+//但是不是很美
+//但是没副作用啊 T_T
 function parseWords(str) {
-    state = sm.init(stateMap,bindMap, "start");
+    state = new sm(stateMap, bindMap, "start");
+    res = []
     for (let i = 0; i < str.length; i++) {
         state = state({
-            "val": str[i]
+            "val": str[i],
+            "index": i,
+            "res": res
         });
     }
+    return res;
 }
-
-
-parseWords("测试数据 目标为the World");
-
-//parseWords("this is a apple")
