@@ -1,35 +1,32 @@
-function test(name, args, except, then = function(name, v) {
-    v ? console.log(name + " test ok") : console.assert(false, name + " test fail");
-}) {
-    let f = this[name];
-    let res = f.apply(this, [].concat(args));
-    let v = JSON.stringify(res.sort()) === JSON.stringify(except.sort());
-    if (then) {
-        then(name, v);
-    }
-    return v;
+function test_lex() {
+    cases = [{
+            "arg": "<div>  apple </div> ",
+            "res": [new token("apple")]
+        },
+        {
+            "arg": "<div>  apple SFD<p>      测试数据 目标为the World  </p>  <p>    ga de fry try. and it's while die  </p>  <p>  </p>  </div>",
+            "res": [new token('apple'),
+                new token('SFD'),
+                new token('the'),
+                new token('World'),
+                new token('ga'),
+                new token('de'),
+                new token('fry'),
+                new token('try'),
+                new token('and'),
+                new token("it's"),
+                new token('while'),
+                new token('die'),
+            ]
+        },
+    ]
+    cases.map((item) => {
+        dom = document.createElement('div');
+        dom.innerHTML = item.arg;
+        item.arg = dom;
+        return item;
+    });
+    testcases(lex, cases)
 }
 
-function runtestcases(cases) {
-    sucessCounter = 0
-    for (var item of cases) {
-        if (test(item[0], item[1], item[2])) {
-            sucessCounter++
-        }
-    }
-    console.log("test case [%d/%d] ok", sucessCounter, cases.length);
-
-}
-
-testcases = [
-    ["parseWords", "died and ", [{
-        "start": 0,
-        "end": 4,
-        "val": "died"
-    }, {
-        "start": 5,
-        "end": 8,
-        "val": "and"
-    }]],
-  ]
-runtestcases(testcases)
+test_lex()
