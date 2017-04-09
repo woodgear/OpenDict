@@ -18,7 +18,7 @@ function lex(dom) {
         return res;
     }
 
-    ignoreElement = ['SCRIPT', 'BUTTON']
+    ignoreElement = ['SCRIPT', 'BUTTON', 'NOSCRIPT', 'STYLE']
 
     function pickupStr(dom) {
         nodes = [dom];
@@ -29,8 +29,10 @@ function lex(dom) {
                 if (item.nodeType == 3) {
                     const nodeValue = item.nodeValue
                     res.push(nodeValue)
+                    re.push(' ')
 
                 } else if (item.nodeType == 1 && !ignoreElement.includes(item.nodeName)) {
+                    // console.log(item.nodeName)
                     nodes.push(item)
                 }
             }

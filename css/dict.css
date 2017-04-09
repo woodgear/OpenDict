@@ -1,0 +1,55 @@
+body {
+    width: 500px;
+    height: 300px;
+    margin: 0px;
+    padding: 0px;
+}
+
+#dict {
+    margin: 0px;
+    padding: 0px;
+    width: 500px;
+    height: 300px;
+    display: block;
+    border: 1px solid red;
+    position: absolute;
+    background-color: lightgray;
+    /*display: none;*/
+}
+
+#closeAll {
+    display: inline;
+}
+
+#counter {
+    display: inline;
+}
+
+#container {
+    float: right;
+}
+
+#word {
+    position: relative;
+    left: 30%;
+    right: 30%;
+    text-align: center;
+    border: 1px solid green;
+    max-width: 30%;
+    font-size: 50px;
+    border-bottom: 1px solid gray
+}
+
+#actionbar {
+    border: 1px solid yellow;
+    position: relative;
+    /*top: 50%;*/
+    bottom: 0%;
+    padding-left: 30%;
+    padding-right: 30%;
+}
+
+.action {
+    height: 50px;
+    /*margin-right: 40px;*/
+}

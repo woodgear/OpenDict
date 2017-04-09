@@ -1,0 +1,26 @@
+{
+    "manifest_version": 2,
+    "name": "OpenDict",
+    "version": "1.0",
+    "description": "从当前网页中找出你的生词",
+    "icons": {
+        "16": "images/dict_16.png",
+        "48": "images/dict_48.png",
+        "128": "images/dict_128.png"
+    },
+    "browser_action": {
+        "default_icon": {
+            "19": "images/dict_16.png",
+            "38": "images/dict_48.png"
+        },
+        "default_title": "OpenDict",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "*://*.misakimei.com/api/*"
+    ],
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "js": ["js/lexer.js", "js/content_script.js"]
+    }]
+}
